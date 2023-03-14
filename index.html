@@ -1,9 +1,42 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+    <style>
+        @-webkit-keyframes blink {
+            50% {
+                border-color: #00ff22;
+            }
+        }
+
+        iframe {
+            border: 4px solid;
+            top: 10px;
+            left: 10px;
+            text-align: center;
+            font-family: monospace;
+
+            -webkit-animation: blink .5s step-end infinite alternate;
+        }
+    </style>
+</head>
+
 <body>
-<img src="./header_private.png"/>
-<iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa" height="800px" width="100%" title="Iframe Example"></iframe>
-<img src="./footer_private.png"/>
-<!--p><a href="https://www.frutasnievesonline.com/" target="iframe_a">W3Schools.com</a></p-->
+    <img id="headerImg" />
+    <iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa" height="800px" width="100%"
+        title="Iframe Example"></iframe>
+    <img id="footerImg" />
+    <!--p><a href="https://www.frutasnievesonline.com/" target="iframe_a">W3Schools.com</a></p-->
+    <script> type = "text/javascript"
+
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let channel = params.channel ? params.channel : 'public';
+        document.getElementById("headerImg").src = "./header_" + channel + ".png";
+        document.getElementById("footerImg").src = "./footer_" + channel + ".png";
+
+    </script>
 </body>
+
 </html>
