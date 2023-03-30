@@ -63,7 +63,6 @@
 
             -webkit-animation: blink .5s step-end infinite alternate;
         }
-
     </style>
 </head>
 
@@ -75,18 +74,19 @@
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'pub')">Iframe in public channel</button>
         <button class="tablinks" onclick="openTab(event, 'priv')">Iframe in private channel</button>
-        <button class="tablinks" onclick="openTab(event, 'event')">"MicroFrontEnd" event communication model</button>
+        <button class="tablinks" onclick="openTab(event, 'event')">"MicroFrontEnd" via IFRAME src</button>
+        <button class="tablinks" onclick="openTab(event, 'eventForm')">"MicroFrontEnd" via IFRAME form submit</button>
     </div>
 
     <div id="pub" class="tabcontent">
         <img src="./header_public.png" width="100%" />
-        <iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa?channel=public"></iframe>
+        <iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa"></iframe>
         <img src="./footer_public.png" width="100%" />
     </div>
 
     <div id="priv" class="tabcontent">
         <img src="./header_private.png" width="100%" />
-        <iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa?channel=private"></iframe>
+        <iframe src="https://spartacus-demo.eastus.cloudapp.azure.com/electronics-spa"></iframe>
         <img src="./footer_private.png" width="100%" />
     </div>
 
@@ -94,27 +94,20 @@
         <h1>SHELL</h1>
         <h3>Automatic JWT data send from Shell to SAP Composable StoreFront when this piece is fully loaded:</h3>
         <p><span>JWT-7asd7fdsaf7sdaf7sdaf87ds77sdf7sdafdsa8fds</span> </p>
-        <iframe id="mainframe" src="./microfrontend.html"></iframe>
+        <iframe id="mainframe1" src="./microfrontend.html"></iframe>
+    </div>
 
-        <script>
+    <div id="eventForm" class="tabcontent" style=" background-color: #fa0404;color:white">
+        <h1>SHELL</h1>
+        <h3>Automatic JWT data send from Shell to SAP Composable StoreFront when this piece is fully loaded:</h3>
+        <p><span>JWT-7asd7fdsaf7sdaf7sdaf87ds77sdf7sdafdsa8fds</span> </p>
 
-            /* DEFINITIONS */
-            var frame = document.getElementById("mainframe");
-            frame = frame ? frame.contentWindow : null;
+        <!-- form target -->
+        <iframe id="mainframe2" name="mainframe2"></iframe>
 
-            /*
-            * RECEIVE MESSAGE FROM CHILD
-            */
-            window.addEventListener("message", (e) => {
-                var data = e.data;
-
-                if (data === "shakehand") {
-                    console.log("SHAKEHAND RECEIVED FROM CHILD")
-                    frame.postMessage("JWT-7asd7fdsaf7sdaf7sdaf87ds77sdf7sdafdsa8fds", "*");
-                }
-            });
-
-        </script>
+        <!-- a form could be dynamically generated and submitted by JavaScript -->
+        <form id="form" target="mainframe2" method="POST" action="./microfrontend.html">
+        </form>
     </div>
 
     <script>
@@ -131,6 +124,28 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
+        /* DEFINITIONS */
+            var frame1 = document.getElementById("mainframe1");
+            frame1 = frame1 ? frame1.contentWindow : null;
+
+            var frame2 = document.getElementById("mainframe2");
+            frame2 = frame2 ? frame2.contentWindow : null;
+
+            /*
+            * RECEIVE MESSAGE FROM CHILD
+            */
+            window.addEventListener("message", (e) => {
+                var data = e.data;
+
+                if (data === "shakehand") {
+                    console.log("SHAKEHAND RECEIVED FROM CHILD")
+                    frame1.postMessage("JWT-7asd7fdsaf7sdaf7sdaf87ds77sdf7sdafdsa8fds", "*");
+                    frame2.postMessage("JWT-7asd7fdsaf7sdaf7sdaf87ds77sdf7sdafdsa8fds", "*");
+                }
+            });
+
+            var form = document.getElementById("form");
+            form.submit();
     </script>
 
 </body>
